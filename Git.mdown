@@ -7,10 +7,6 @@
 ## Tabla de Contenidos
 1. [Introducción y Control de Versiones Local con Git ](#introducción-y-control-de-versiones-local-con-git)
 2. [Colaboración en la Nube con GitHub ](#colaboración-en-la-nube-con-github)
-3. [Buenas Prácticas Bioinformáticas y Reproducibilidad](#buenas-prácticas-bioinformáticas-reproducibilidad)
-4. [Ejercicios](#ejercicio)
-5. [Recursos y Referencias](#recursos-y-referencias)
-
 ---
 
 ## Introducción y Control de Versiones Local con Git
@@ -130,7 +126,7 @@ git log --oneline --graph --all
 > 6. Utiliza `git log --oneline --graph --all` y manda un screenshot a tavoibrahim@gmail.com
 ---
 
-## 2. Colaboración en la Nube con GitHub
+## Colaboración en la Nube con GitHub
 
 ### 2.1. Conectar tu Repositorio Local con GitHub
 1. Ve a [GitHub](https://github.com) y crea un nuevo repositorio público llamado `Fsylv_CironRepro`.
@@ -170,7 +166,8 @@ Al crear esta rama, en automático nos cambiamos de main a filtering-mac. Para r
 > b) Guarda el archivo en la rama actual y súbelo a GitHub:
 ---
 
-### AGREGAR COPIA DE PANTALLA
+![alt text](https://github.com/TavoIbrahim/AnalisisDatosGenomicos/blob/d9f5feb56f8a8d6277ffbd42970d10925285efb8/Capture%20d'%C3%A9cran%202026-09-29%20095255.png)
+
 Estos cambios no aparecen en la rama principal (master or main) ni en el repo, pero en GitHub nos aparece una opcion que nos permite comparar entre ramificaciones y realizar *pull request* (volvemos a ese termino mas adelante).
 
 ### 2.3. Integración de Cambios (*Merging*)
@@ -207,7 +204,7 @@ git push origin --delete filtering-mac # Github
 > 4. Abre un **Pull Request** en GitHub para solicitar revisión e integración a `main`.
 ---
 
-### 2.6 Fork
+### 2.5. Fork
 
 Hacer un fork implica copiar un repositorio. La idea de un fork es tener un punto de partida para proponer cambios y/o desarrollar nuevas ideas, SIN realizar modificaciones al repositorio original.
 
@@ -225,7 +222,7 @@ Aparecerá algo así:
 **3)** Pull request, es decir, le propones tus cambios al usuario original
 
 
-## 2.5 Consideraciones finales
+## 2.6 Consideraciones finales
 
 * **Mensajes de commit semánticos:** Usa keywords claras (`feat:`, `fix:`, `docs:`, `style:`).
 * **Entornos reproducibles:** Documenta el pipeline en `README.md` indicando las versiones exactas de herramientas usadas (ej. Stacks v2.6, fastsimcoal2 v2.7, R packages).
