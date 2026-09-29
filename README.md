@@ -1,2 +1,5 @@
 # Introduccion al analisis de datos genomicos
-Git and Github for biologist
+Aca encuentras las notas de las clases de:
+  - Introduccion a bash (segunda parte)
+  - Repositorios y reproducibilidad
+  - Analisis de datos RADseq-GbS y similares
