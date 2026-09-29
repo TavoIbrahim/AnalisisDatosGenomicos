@@ -1,123 +1,213 @@
-# GitHub y Git desde la terminal
+# Reproducibilidad y repositorios bioinformaticos
+> **TEMAS SELECTOS: INTRODUCCIÓN AL ANÁLISIS DE SECUENCIACIÓN MASIVA**  
+> Gustavo Ibrahim Giles Pérez
 
-Lo primero que debemos hacer es "vincular" nuestra cuenta de GitHub con nuestro ordenador. Para ello:
+---
 
-`git config --global user.email "USERNAME@gmail.com"`
+## Tabla de Contenidos
+1. [Introducción y Control de Versiones Local con Git ](#introducción-y-control-de-versiones-local-con-git)
+2. [Colaboración en la Nube con GitHub ](#colaboración-en-la-nube-con-github)
+3. [Buenas Prácticas Bioinformáticas y Reproducibilidad](#buenas-prácticas-bioinformáticas-reproducibilidad)
+4. [Ejercicios](#ejercicio)
+5. [Recursos y Referencias](#recursos-y-referencias)
 
-y luego:
+---
 
-`git config user.name "USERNAME_GITHUB"`
+## Introducción y Control de Versiones Local con Git
 
-## Comándos básicos de Git
+### 1.1. Conceptos
+* **<span style="color:#00a389">GitHub</span>**: Repositorio que se encuentra hospedado en una nube.
+  * Facilita el desarrollo de codigo en equipo.
+  * Poner a disposicion de todxs el codigo.
+* **<span style="color:#00a389">Git</span>**: Sistema de control de versiones de acceso abierto que funciona de forma local en el ordenador.
+  * Es un sistema que nos ayuda a mantener un control de versiones/cambios:
+  
+  `script_v1.R`, `script_v2_FINAL.R`, `script_FINAL_v3.R`.
+  * Permite el trabajo en equipo.
+  * Facilita la reproducibilidad de resultados.
 
-Para crear un nuevo repositorio de git, nos movemos al directorio de nuestro interés (e.g., *ABC_example*) y dentro de ese directorio, utilizamos:
+### 1.2. Configuración Inicial de Git
+Es importante que te hagas una cuenta de GitHub, solo necesitas tu correo :)
+Luego de instalar Git, vamos a crear un link entre Git y GitHub (solo se hace una vez por máquina):
 
-`git init`
+```bash
+git config --global user.name "Tu UserName"
+git config --global user.email "tu_email@gmail.com"
+git config --global init.defaultBranch main
+git config --list
+```
+La ultima linea de comando funciona simplemente para verificar la info que acabamos de proporcionar
 
-En pantalla veremos algo así como `Initialized empty Git repository in /home/YOUR_USERNAME/ABC_example/.git/`. Nota que el repositorio hasta ahora, se encuentra vacio. 
+### 1.3. Crear un repositorio
+Para crear un nuevo repositorio de git, nos movemos al directorio de nuestro interés (o creamos uno). Dentro de ese directorio:
 
-Git está organizado en tres partes: el Working directory (WD), el Index y Head.
+```bash
+mkdir Fsylv_CironRepro
+cd Fsylv_CironRepro
+git init
+```
+Si queremos cambiar de wd, primero tenemos que usar `rm -rf .git`
 
-![alt text](https://github.com/TavoIbrahim/Git/blob/master/trees.png)
-Imagen de [Roger Dudler](https://twitter.com/rogerdudler) 
+Verifica el estado del directorio:
+```bash
+git status
+```
 
-Git dice que nuestro repositorio esta vacio (aunque en realidad tenemos datos dentro del WD) porque tenemos que "empujar" nuestros archivos, desde WD hasta Head. Para ello, utilizaremos `git add`, que registra los cambios (archivos, directorios, etc.) a Index y `git commit -m` nos permite realizar comentarios de dichos cambios y llevarlos a Head.  
+### 1.4. Git-GitHub workflow
+Git está organizado en 4 partes: **<span style="color:#00a389">Working Directory</span>**, **<span style="color:#00a389">Staging Area</span>**, **<span style="color:#00a389">Local Repository</span>** y **<span style="color:#00a389">Remote Repository</span>**.
 
-En nuestro repositorio local viven ABC_scripts y un README.txt. Para llevar estos archivos, del WD a Index, en la terminal escribiremos:
+![alt text](https://github.com/TavoIbrahim/AnalisisDatosGenomicos/blob/c16d3d12f0d085920a4ddde9f7e3a69e304f120e/Capture%20d'%C3%A9cran%202026-09-29%20142756.png)
+ 
+---
+> ### Ejercicio Práctico 0
+ * Vamos a simular un proyecto bioinformatico, por lo tanto, en `Fsylv_CironRepro` crea cuatro directorios: bin, data, meta, out
+ *  Crea un script usando `nano` para calcular kinship. Kindred utiliza un ejecutable llamado `kindred`, y utiliza las flags -i y -o para el input (con terminacion .vcf) y el output (un prefix), respectivamente. Asume que el archivo de entrada esta guardado en un directorio llamado data y que el archivo de salida quieres que se escriba en un directorio llamado out.
+ * Queremos que el script se llame `calcKinship.sh` y guardalo en bin
+ * Vuelve a usar `git status`
+---
 
-`git add ABC_scripts`
+Mueve (no literalmente) el directorio bin al Staging Area:
+```bash
+git add bin
+git status
+```
+Vamos a observar algo similar a esto:
+```bash
+On branch main
 
-`git add README_ABC.txt`
+No commits yet
 
-Para verificar que nuestros archivos se encuentren en Index, podemos escribir `git status` y nos aparecerá una lista de los archivos que se encuentran en index y que necesitan ser commiteados para llegar a Head. Ahora, para migrar los archivos de Index a Head, escribiremos:
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   bin/calcKinship.sh
+```
+El **<span style="color:#00a389">Staging Area</span>** es el punto donde vamos a organizar nuestros archivos y/o modificarlos
 
-`git commit -m "add files for an ABC analysis"`, entre comillas va un comentario. Te darás cuenta que el commit fue un éxito cuando te aparezca una lista de los archivos en pantalla. Si queremos hacer un commit por cada archivo, podemos hacer `git commit -m "add README.txt" README.txt` y `git commit -m "add README.txt" ABC_scripts`.
+Registra lo que acabamos de hacer en el historial (*commit*):
+```bash
+git commit -m "Agregue un directorio bin con un script para calcular kinship"
+git status
+```
+vamos a observar algo asi en la terminal:
+```bash
+On branch main
+nothing to commit, working tree clean
+```
+lo que indica que estamos listos para mover nuestro script al remote repository.
 
-Ahora ya podemos subir nuestro repositorio local (*ABC_example*), a GitHub. Para hacerlo, en GitHub.com tenemos que crear un repositorio remoto con "point and click". En este caso, mi repositorio en GitHub se llama *ABC_example* y está vacio.
+### 1.5. Modificación, Inspección de Cambios y Rastreo
+Kindred requiere de que ciertas flags esten presentes en el archivo de entrada (.vcf). Modifiquemos el script para que podamos agregar las flags con bcftools:
 
-Regresamos a la terminal y escribimos:
+```bash
+bcftools +fill-tags ../data/pre_input.vcf.gz >> ../data/input.vcf
+```
 
-`git remote add origin https://github.com/TavoIbrahim/ABC_example.git` que crea un vínculo (remote) llamado *origin*, entre tu repositorio local y el repositorio que creamos en GitHub; y 
+Compara las diferencias entre tu script actual y el último commit (*diff*):
+```bash
+git diff
+```
 
-`git push -u origin master`, que "empuja" los archivos que están en Head a GitHub.
+Guarda el nuevo cambio:
+```bash
+git commit -am "Agregamos una linea de comando para utilizar bcftools en un paso previo"
+```
+```bash
+[main 016dc16] Agregamos una linea de comando para utilizar bcftools en un paso previo
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+```
 
-## Ramas (branch)
+Inspecciona el historial de commits:
+```bash
+git log --oneline --graph --all
+```
+---
+> ### Ejercicio Práctico 1
+> 1. Crea un archivo llamado `README.md` que describa el objetivo del proyecto.
+> 2. Agrega una línea con la especie de estudio (ej. `Especie: Pinus sylvestris`).
+> 3. Añade el archivo al Staging Area y haz un commit con el mensaje `"Agregue el README del proyecto"`.
+> 4. Modifica `README.md` agregando la sección `"Requisitos de software: bcftools, kindred, vcftools"`.
+> 5. Usa `git diff` para revisar los cambios y realiza un segundo commit.
+> 6. Utiliza `git log --oneline --graph --all` y manda un screenshot a tavoibrahim@gmail.com
+---
 
-Cuando creamos un repositorio en nuestro ordenador, por defecto, estamos trabajando en la rama *master*. Si queremos realizar cambios o pruebas, sin modificar nuestro código, es muy útil crear ramas o *branches*. Las ramas son copias de *master* en las que podemos hacer pruebas, cambios, etc. 
+## 2. Colaboración en la Nube con GitHub
+
+### 2.1. Conectar tu Repositorio Local con GitHub
+1. Ve a [GitHub](https://github.com) y crea un nuevo repositorio público llamado `Fsylv_CironRepro`.
+2. **No** agregues README, `.gitignore` ni licencia desde la web.
+3. Vincula tu repositorio local con el remoto (reemplaza `TavoIbrahim` por tu cuenta):
+
+```bash
+git remote add origin https://github.com/TavoIbrahim/Fsylv_CironRepro.git
+git branch -M main
+git push -u origin main
+```
+La primera linea crea un puente, llamado *origin*, entre Staging area y **Head**
+
+`git push -u origin main` "empuja" los archivos a traves de ese puente y voila!, ya estan en GitHub.
+
+### 2.2. Trabajo en Ramas (*Branching*)
+
+Cuando creamos un repositorio en nuestro ordenador, por defecto, estamos trabajando en la rama *master* o *main*. Si queremos realizar cambios o pruebas, sin modificar nuestro código, es muy útil crear ramas o *branches*. Las ramas son copias de *main* en las que podemos hacer pruebas, cambios, etc. 
 
 Es una buena idea, antes de empezar a crear ramas, corroborar en dónde nos encontramos, para ello, en la terminal escribimos: 
-
 `git branch -a`
 
-este comando nos arrojará la lista de las ramas que existen en nuestro repo y con un asterisco, nos marcará la rama en la que nos encontramos.
+```bash
+* main
+  remotes/origin/main
+```
+este comando nos arrojará la lista de las ramas que existen en nuestro repo y con un asterisco, nos marcará la rama en la que nos encontramos. Vamos a hacer una rama de master que se llame `filtering-mac`, para ello, en la terminal escribimos:
 
-Vamos a hacer una rama de master que se llame Physalia, para ello, en la terminal escribimos:
+`git checkout -b filtering-mac`
 
-`git checkout -b Physalia`
+Al crear esta rama, en automático nos cambiamos de main a filtering-mac. Para regresar a main, sólo tenemos que escribir: `git checkout main` y para regresar a Physalia: `git checkout filtering-mac`.
 
-Al crear esta rama, en automático nos cambiamos de master a Physalia. Para regresar a master, sólo tenemos que escribir: `git checkout master` y para regresar a Physalia: `git checkout Physalia`.
+---
+> ### Ejercicio Práctico 2
+> a) Ya en nuestra rama, vamos a elaborar un script para filtrar un vcf que vive en `data/`, usando mac=2. Para ello, usaremos Vcftools.
 
-En la rama Physalia, creamos un directorio que se llama Sequences y dentro de éste, un archivo README.txt. Estos serán nuestros cambios respecto a master. Una vez hechos, utilizamos `git add` y `git commit -m` para llevarlos a HEAD. 
+> b) Guarda el archivo en la rama actual y súbelo a GitHub:
+---
 
-Para empujar nuestra rama (Physalia) a GitHub, utilizamos:
+### AGREGAR COPIA DE PANTALLA
+Estos cambios no aparecen en la rama principal (master or main) ni en el repo, pero en GitHub nos aparece una opcion que nos permite comparar entre ramificaciones y realizar *pull request* (volvemos a ese termino mas adelante).
 
-`git push origin Physalia`
+### 2.3. Integración de Cambios (*Merging*)
+Una vez que estamos seguros de que queremos incorporar las modificaciones en filtering-mac, vamos a unir ambas ramas. Primero, volvemos primero a la rama principal
+```bash
+git checkout main
+```
+fusionamos la rama
+```bash
+git merge filtering-mac # Colapsamos las dos ramas
+git push origin main # y empujamos los cambios a Head
+```
+y la eliminamos 
+```bash
+git branch -d filtering-mac # localmente
+git push origin --delete filtering-mac # Github
+```
 
-Estos cambios no aparecen en master, sino hasta que realicemos un *merge*. En la terminal, escribimos (desde master):
+### 2.4. Pull Request y trabajo en equipo :)
+---
+> ### Ejercicio Práctico 3
+> 1. Crea una rama llamada `feature/fst-pipeline`.
+> 2. En esa rama, crea un script en R o Bash llamado `run_fst.R`.
+> 3. Haz commit y súbelo a GitHub (`git push origin feature/fst-pipeline`).
+> 4. Abre un Pull Request desde la interfaz web de GitHub.
+> 5. Revisa los cambios en la interfaz web y realiza el "Merge" del Pull Request.
+> 6. En tu terminal local, regresa a `main` y ejecuta `git pull` para actualizar la versión local.
+> 7. No olvides podar la rama que generaste
 
-`git merge Physalia --no-commit` y `git push origin master` para subir los cambios a GitHub (El repositorio remoto). 
+> ### Ejercicio Práctico 4 ()
+> 1. Un colaborador clona el repositorio: `git clone <URL>`
+> 2. Crea una rama para su aporte: `git checkout -b feature/pca-analysis`
+> 3. Realiza cambios y envía sus cambios con `git push origin feature/pca-analysis`.
+> 4. Abre un **Pull Request** en GitHub para solicitar revisión e integración a `main`.
+---
 
-
-
-
-
-
-
-
-
-Es probable que te arrepientas de llevar algo a Head (XD), así que existen algunos comandos para solucionarlo:
-
-`git log` nos permitirá observar el historial de nuestro repositorio local (es decir, los commits). Nos aparecerá un texto similar a éste:
-
-`commit a39041d1fc86cf34b01697ac3b5fa187509dcf6b`
-
-Si queremos eliminar un commit de manera definitiva, entonces escribimos: `git reset --hard a39041d1fc86cf34b01697ac3b5fa187509dcf6b`,
-por lo que tendrás que empezar desde cero a "empujar" tus archivos y directorios desde el WD hasta Head.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-`git push origin master` 
-
-"empuja" los cambios a nuestro GitHub. En este paso, es necesario que cuentes con tu usuario y contraseña, por lo que `git push origin master` sólo es útil para subir cambios a NUESTRO GitHub. Para empujar cambios a otros usuarios, se requerirá realizar un **pull request**.
-
-
-
-
-
-
-
-`git clone /home/PATH_to_working_directory` y `git clone https://github.com/TavoIbrahim/BioinfinvRepro.git` crea copias de los repositorios que existen en el escritorio y en el servidor (GitHub) respectivamente. 
-
-
-
-
-
-## Fork
+### 2.6 Fork
 
 Hacer un fork implica copiar un repositorio. La idea de un fork es tener un punto de partida para proponer cambios y/o desarrollar nuevas ideas, SIN realizar modificaciones al repositorio original.
 
@@ -132,59 +222,21 @@ Aparecerá algo así:
 ![alt text](https://github.com/TavoIbrahim/Git/blob/master/Captura%20de%20pantalla%20de%202018-04-17%2009-01-31.png)
 
 **2)** Realizas los cambios que vas a proponer
-
 **3)** Pull request, es decir, le propones tus cambios al usuario original
 
-## Hacer cambios Ordenador --> Nuestro GitHub
 
-En este caso, vamos a copiar (descargar) el repositorio BioinfinvRepro que vive en mi [GitHub](https://github.com/TavoIbrahim) a algún lugar del ordenador (En realidad, este repo es un **fork**, el original vive en la cuenta de [Alicia Mastretta](https://github.com/AliciaMstt)). Para ello, hay que escribir:
+## 2.5 Consideraciones finales
 
-`git clone https://github.com/TavoIbrahim/BioinfinvRepro.git`
+* **Mensajes de commit semánticos:** Usa keywords claras (`feat:`, `fix:`, `docs:`, `style:`).
+* **Entornos reproducibles:** Documenta el pipeline en `README.md` indicando las versiones exactas de herramientas usadas (ej. Stacks v2.6, fastsimcoal2 v2.7, R packages).
+* **Preservación y DOIs:** Vincula tu repositorio a plataformas como Zenodo para generar un DOI citable cuando publiques tu artículo científico.
 
-Es necesario que nuestro WD corresponda a BioinfinvRepro, así que:
+---
+### Ejercicio final
 
-`cd BioinfinvRepro`
-
-A partir de este momento, los comandos que nos será útiles son: 
-
-`git status`
-
-que nos permitirá comprobar nuestra situación (si hay archivos o cambios que han quedado pendientes subir/commit). Por ejemplo, si nosotros creamos un archivo (e.g., Physalia_physalis.txt) y después escribimos `git status`, veremos que nuestra situación cambió. Para darle seguimiento a este cambio, es necesario utilizar: 
-
-`git add`
-
-que agregará los cambios (archivos, directorios, etc.) a git (i.e., Physalia_physalis.txt); y  
-
-`git commit -m`
-
-que permitirá realizar comentarios de los cambios (e.g., `git commit -m "agregar archivo Physalia"`). Finalmente,  
-
-`git push origin master` 
-
-"empuja" los cambios a nuestro GitHub. En este paso, es necesario que cuentes con tu usuario y contraseña, por lo que `git push origin master` sólo es útil para subir cambios a NUESTRO GitHub. Para empujar cambios a otros usuarios, se requerirá realizar un **pull request**.
-
-## Sincronizar un repositorio con una cuenta GitHub (o crear un remote)
-
-Para sincronizar la copia del repositorio que ya descargamos (el fork de BioinfinvRepro, en mi GitHub) y que vive en nuestro ordenador, con el código guardado en GitHub (el original, del GitHub de Alicia), hay que crear un *remote* o un vínculo. 
-
-Estando dentro del directorio, BioinfinvRepro, escribimos
-
-`git remote -v` 
-
-Esta línea nos sirve para verificar el *origin* del repositorio que descargamos. En este caso el origin debe ser la URL al código que se encuentra forkeado en mi GitHub. 
-
-Para mantener actualizado nuestro código, necesitamos declarar al repositorio *upstream*, es decir, al repositorio target del que vamos a jalar las actualizaciones (el BioinfinvRepro de Alicia que vive en GitHub). Para ello utilizaremos:  
-
-`git remote add upstream https://github.com/AliciaMstt/BioinfinvRepro.git`
-
-posteriormente, para jalar los cambios, escribiremos:
-
-`git fetch upstream` 
-
-este último comando, además de actualizar nuestro repo, mantendrá intactos nuestros cambios en una rama local que se llamará `upstream/master` 
-
-Posteriormente, debemos escribir `git checkout master`, cuya opción `checkout`, nos regresará a la rama master. Es en esta rama donde actualizaremos
-
-
-
-
+1. Crea una nueva rama local llamada `fix/fix-mac5`.
+2. Modifica el script filter_vcf.sh e implementa un valor de mac=5.
+3. Haz commit de tus cambios e intégralos a la rama `main`.
+4. Sube la rama `main` actualizada a GitHub.
+5. Verifica en la web de GitHub que el historial de commits sea limpio y claro.
+---
