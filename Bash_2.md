@@ -70,7 +70,7 @@ cut -f 1 anotaciones.bed | sort | uniq -c
 Ejemplos:
 ```bash
 # Guardar las secuencias que contienen un motivo en un archivo nuevo:
-grep "AAGCTT" muestra_R1.fastq > lecturas_con_motivo.txt
+grep "AGATCGGAAGAG" muestra_R1.fastq > lecturas_con_motivo.txt
 
 # Registrar una marca de tiempo en un archivo de log:
 echo "Procesamiento finalizado a las $(date)" >> reporte.log
