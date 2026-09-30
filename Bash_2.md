@@ -42,7 +42,8 @@ grep -c "^@" muestra_R1.fastq
 # Buscar la presencia de un adaptador de secuenciacion especifico:
 grep "AGATCGGAAGAG" muestra_R1.fastq
 ```
-https://github.com/TavoIbrahim/AnalisisDatosGenomicos/blob/8789a9a77b671740e91b5a7512d21999d8a5c151/RegularExp.gif
+![alt text](https://github.com/TavoIbrahim/AnalisisDatosGenomicos/blob/8789a9a77b671740e91b5a7512d21999d8a5c151/RegularExp.gif)
+
 ### **1.3. Ordenamiento y filtrado con cut, sort y uniq**
 - Comando `cut`: Extrae columnas especificas delimitadas por caracteres (por ejemplo, tabuladores en archivos SAM/BED).
 - Comando `sort`: Ordena lineas de texto alfabetica o numericamente (-n para numeros, -k para especificar columna).
