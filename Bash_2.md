@@ -92,7 +92,7 @@ zcat muestra_R1.fastq.gz | paste - - - - | cut -f 2 | sort | uniq -c | sort -nr 
 Ejemplos:
 ```bash
 # Cambiar el formato de cabecera de un archivo FASTA usando sed:
-sed 's/>chr/>Cromosoma_/' secuencias.fasta > secuencias_renombradas.fasta
+sed 's/>/>Especie/' secuencias.fasta > secuencias_renombradas.fasta
 
 # Filtrar un archivo BED dejando solo regiones mayores a 1000 pares de bases usando awk:
 awk '($3 - $2) > 1000 {print $0}' regiones.bed
