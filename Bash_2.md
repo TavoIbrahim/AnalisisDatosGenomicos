@@ -2,6 +2,7 @@
 # Uso basico del lenguaje Bash
 > **TEMAS SELECTOS: INTRODUCCIÓN AL ANÁLISIS DE SECUENCIACIÓN MASIVA**  
 > Gustavo Ibrahim Giles Pérez
+> tavoibrahim@gmail.com, gustavo.giles-perez@inrae.fr
 ---
 ## Temas
 * Inspección y Manipulación de Archivos NGS (`grep`, `cut`, `sort`, `uniq`)
